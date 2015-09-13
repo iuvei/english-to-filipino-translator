@@ -1,24 +1,14 @@
-/*
+// launch mongodb manually from the mac:
+// mongod --config /usr/local/etc/mongod.conf
+
 var express = require('express'),
 	app = express(),
-	port = process.env.PORT || 3000;
+	cors = require('cors');
 
-app.use(function(req, res) {
-	var data = 'hello there';
-
-	res.writeHead('200', { 'Content-Type' : 'text/html' });
-	res.end(data);
-});
-app.listen(port);
-
-console.log('server start on port %s', port);
-*/
-
-var express = require('express');
-var app = express();
-
-app.get('/', function (req, res) {
-  res.send('Hello World!');
+app.use(cors());
+app.post('/add-to-dictionary', function (req, res) {
+  var params = req.body;
+  console.log(params);
 });
 
 var server = app.listen(8080, function () {

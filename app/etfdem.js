@@ -1,7 +1,4 @@
-// declare the app
-var ETFDEM = angular.module('ETFDEM', ['ngRoute'])
-
-.controller('MainController', function($scope) {
+ETFDEM.controller('MainController', ['$scope', function($scope) {
   $scope.phrase = '';
   $scope.translatePhrase = function() {
   	console.log($scope.phrase);
@@ -21,16 +18,52 @@ var ETFDEM = angular.module('ETFDEM', ['ngRoute'])
   		$('#phrase').val($scope.phrase);
   	}
   });
-})
-.config(function($routeProvider, $locationProvider) {
-  $routeProvider
-  	.when('/', {
-  		templateUrl: 'views/index.html',
-  		controller: 'MainController'
-  	})
-    .when('/admin', {
-      templateUrl: 'admin.html',
-      controller: 'AdminController'
-    })
-    .otherwise({ redirectTo : '/' });
-});
+}]);
+
+ETFDEM.controller('AdminController', ['$scope', '$route', 'config', '$http', function($scope, $route, config, $http) {
+  var Words, words, whenClicked, addWords, admin;
+  var p = $route.current.params;
+
+  adminAdd = {
+    whenClicked : function () {
+      var that = this;
+      $('#addWords').click(function() {
+        that.addWords();
+      });
+    },
+    addWords : function() {
+      words = new Words($scope.word.eng_word, $scope.word.fil_word);
+      words.insert(function(data, status) {
+        if (status !== 200) {
+          console.log('There was an error sending POST.');
+          return;
+        };
+
+        console.log('success');
+      });
+    }
+  };
+
+  // check the URL path
+  if (p.words_dictionary) {
+    // words_dictionary
+    adminAdd.whenClicked();
+  } else {
+    // '/'
+    adminAdd.whenClicked();
+  }
+
+  // create the Words object
+  Words = function(eng, fil) {
+    this.eng = eng;
+    this.fil = fil;
+  };
+  Words.prototype.insert = function(callback) {
+    var params = { english: this.eng, filipino: this.fil };
+    $http.post(config.NODEURL + 'add-to-dictionary', params).then(function(resp){
+      callback(resp.data, resp.status);
+    }, function(resp) {
+      callback(resp.data, resp.status);
+    });
+  }
+}]);
