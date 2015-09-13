@@ -23,6 +23,8 @@ ETFDEM.controller('MainController', ['$scope', function($scope) {
 ETFDEM.controller('AdminController', ['$scope', '$route', 'config', '$http', function($scope, $route, config, $http) {
   var Words, words, whenClicked, addWords, admin;
   var p = $route.current.params;
+  $scope.word = $scope.word || {};
+  $scope.word.type = 'noun'; // set default select
 
   adminAdd = {
     whenClicked : function () {
@@ -32,7 +34,7 @@ ETFDEM.controller('AdminController', ['$scope', '$route', 'config', '$http', fun
       });
     },
     addWords : function() {
-      words = new Words($scope.word.eng_word, $scope.word.fil_word);
+      words = new Words($scope.word.eng_word, $scope.word.fil_word, $scope.word.type);
       words.insert(function(data, status) {
         if (status !== 200) {
           console.log('There was an error sending POST.');
@@ -54,12 +56,13 @@ ETFDEM.controller('AdminController', ['$scope', '$route', 'config', '$http', fun
   }
 
   // create the Words object
-  Words = function(eng, fil) {
+  Words = function(eng, fil, type) {
     this.eng = eng;
     this.fil = fil;
+    this.word_type = type;
   };
   Words.prototype.insert = function(callback) {
-    var params = { english: this.eng, filipino: this.fil };
+    var params = { english: this.eng, filipino: this.fil, type: this.word_type };
     $http.post(config.NODEURL + 'add-to-dictionary', params).then(function(resp){
       callback(resp.data, resp.status);
     }, function(resp) {
