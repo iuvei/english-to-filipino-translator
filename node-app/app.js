@@ -5,24 +5,17 @@ var express = require('express'),
 	app = express(),
 	cors = require('cors'),
 	bodyParser = require("body-parser"),
-	wordCheck = require("./app_modules/word-checker");
+	mongoose = require('mongoose'),
+	fs = require('fs'),
+	config = require("./config/config.js");
+
+//connect to db
+mongoose.connect(config.db.url);
 
 app.use(cors());
 app.use(bodyParser.json());
-app.post('/add-to-dictionary', function (req, res) {
-  var params = req.body;
-  var reply = {};
+require('./routes')(app);
 
-  if (wordCheck.checkValid(params.english) && wordCheck.checkValid(params.filipino)) {
-  	wordCheck.english(params.english);
-  	wordCheck.filipino(params.filipino);
-  	reply = { status : 'success' };
-  } else {
-  	reply = { status : 'Invalid word character.' };
-  }
-  res.writeHead(200, {'Content-Type': 'application/json'});
-  res.end(JSON.stringify(reply));
-});
 app.listen(8080, function() {
   console.log('Listening at 8080');
 });

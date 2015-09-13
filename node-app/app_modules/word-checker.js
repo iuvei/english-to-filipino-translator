@@ -1,19 +1,39 @@
+var Dict = require('../models/dict');
+
 var WordCheck = function () {
 	this.eng, this.fil;
 }
 
-WordCheck.prototype.checkValid = function(word) {
-	// only alphabet characters allowed
-	re = /[A-Za-z]+/g;
-	return re.test(word);
+WordCheck.prototype.checkValid = function(param) {
+	if (typeof(param.english) !== 'undefined' && typeof(param.filipino) !== 'undefined') {
+	  // only alphabet characters allowed
+	  var re = /[A-Za-z]+/g;
+	  if (re.test(param.english) === false) {
+	  	return false;
+	  };
+
+	  re = /[A-Za-z]+/g; // re-declare re otherwise false results
+	  if (re.test(param.filipino) === false) {
+	  	return false;
+	  };
+
+	  return true;
+	}
 };
 
-WordCheck.prototype.english = function(word) {
-	this.eng = word;
-};
+WordCheck.prototype.save = function(param) {
+  var dict = new Dict();
+  dict.english = param.english.toLowerCase();
+  dict.filipino = param.filipino.toLowerCase();
+  dict.type = param.type;
+  dict.verified = 1; // set verified to true
+  dict.save(function(err) {
+    if (err) {
+	  throw err;	
+    };
 
-WordCheck.prototype.filipino = function(word) {
-	this.fil = word;
+    return { status : 'success' };
+  });
 };
 
 module.exports = new WordCheck();

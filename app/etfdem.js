@@ -41,7 +41,8 @@ ETFDEM.controller('AdminController', ['$scope', '$route', 'config', '$http', fun
           return;
         };
 
-        console.log('success');
+        $scope.word.eng_word = '';
+        $scope.word.fil_word = '';
       });
     }
   };
