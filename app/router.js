@@ -5,11 +5,15 @@ ETFDEM.config(function($routeProvider) {
   		controller: 'MainController'
   	})
     .when('/admin', {
-      templateUrl: 'views/admin.html',
+      templateUrl: 'views/admin/admin.html',
       controller: 'AdminController'
     })
-    .when('/admin/:words_dictionary', {
-        templateUrl: 'views/admin.html',
+    .when('/admin-sentence-add', {
+        templateUrl: 'views/admin/add-sentence.html',
+        controller: 'AdminController'
+    })
+    .when('/admin-words-add', {
+        templateUrl: 'views/admin/admin.html',
         controller: 'AdminController'
     })
     .otherwise({ redirectTo : '/' });

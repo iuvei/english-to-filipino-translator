@@ -1,0 +1,35 @@
+<h3>Add Sentence:</h3>
+<div class="row">
+  <div class="col-md-6">
+  	English:
+  </div>
+</div>
+<div class="row">
+  <div class="col-md-6">
+    <input type="text" ng-model="sentence.eng" size="50">
+  </div>
+</div>
+<div class="row">
+  <div class="col-md-3">
+  	Filipino (Tagalog):
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-md-6">
+    <input type="text" ng-model="sentence.fil" size="50">
+  </div>
+</div>
+<div class="row">
+  <div class="col-md-3">
+  	<input type="radio" ng-model="sentence.isFormal" value="1"> Formal sentence
+  </div>
+  <div class="col-md-3">
+  	<input type="radio" ng-model="sentence.isFormal" value="0"> Informal sentence
+  </div>
+</div>
+<div class="row">
+  <div class="col-md-3">
+  	<button class="btn btn-primary" id="addSentence">Add Sentence</button>
+  </div>
+</div>

@@ -7,12 +7,12 @@ var WordCheck = function () {
 WordCheck.prototype.checkValid = function(param) {
 	if (typeof(param.english) !== 'undefined' && typeof(param.filipino) !== 'undefined') {
 	  // only alphabet characters allowed
-	  var re = /[A-Za-z]+/g;
+	  var re = /^[A-Za-z\s]+$/g;
 	  if (re.test(param.english) === false) {
 	  	return false;
 	  };
 
-	  re = /[A-Za-z]+/g; // re-declare re otherwise false results
+	  re = /^[A-Za-z\s]+$/g; // re-declare re otherwise false results
 	  if (re.test(param.filipino) === false) {
 	  	return false;
 	  };

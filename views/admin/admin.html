@@ -1,4 +1,4 @@
-<h3>Words Dictionary</h3>
+<h3>Add Words</h3>
 <div class="row">
   <div class="col-md-3">
   	English:
@@ -12,7 +12,7 @@
 </div>
 <div class="row">
   <div class="col-md-3">
-  	<input type="text" ng-model="word.eng_word" size="25">
+  	<input type="text" id="eng_word" ng-model="word.eng_word" size="25">
   </div>
   <div class="col-md-3">
   	<input type="text" ng-model="word.fil_word" size="25">
@@ -31,4 +31,20 @@
   <div class="col-md-3">
   	<button class="btn btn-primary" id="addWords">Add Words</button>
   </div>
+</div>
+<br/><br/>
+
+<div id="suggest" style="display:none">
+  <table class="table table-bordered">
+    <tr>
+      <th>English</th>
+      <th>Filipino</th>
+      <th>Type</th>
+    </tr>
+    <tr ng-repeat="sug in suggest | filter:word.eng_word">
+      <td>{{ sug.english }}</td>
+      <td>{{ sug.filipino }}</td>
+      <td>{{ sug.type }}</td>
+    </tr>
+  </table>
 </div>
