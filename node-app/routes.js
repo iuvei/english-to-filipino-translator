@@ -2,6 +2,8 @@ var	wordCheck = require("./app_modules/word-checker");
 var	sentenceCheck = require("./app_modules/sentence-checker");
 var translator = require("./app_modules/translator");
 var suggestWords = require("./app_modules/suggest-words");
+var suggestSentences = require("./app_modules/suggest-sentences");
+
 module.exports = function(app) {
   app.post('/add-to-dictionary', function (req, res) {
   	var params = req.body;
@@ -59,6 +61,27 @@ module.exports = function(app) {
 
   	suggestWords.chara = params.char;
   	query = suggestWords.query();
+  	query.exec(function (err, data) {
+	  if (err) {
+	  	throw err;
+	  };
+
+	  for (var i = 0; i < data.length; i += 1) {
+	  	reply[i] = data[i];
+	  }
+
+	  res.writeHead(200, {'Content-Type': 'application/json'});
+	  res.end(JSON.stringify(reply));
+	});
+  });
+
+  app.post('/suggest-sentences', function(req,res) {
+  	var params = req.body;
+  	var reply = {};
+  	var query
+
+  	suggestSentences.chara = params.char;
+  	query = suggestSentences.query();
   	query.exec(function (err, data) {
 	  if (err) {
 	  	throw err;

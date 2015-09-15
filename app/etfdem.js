@@ -23,19 +23,20 @@ ETFDEM.controller('MainController', ['$scope', 'config', '$http', function($scop
   	// if key pressed is not equal to space key
   	// note: buggy behaviour without this IF statement for checking the space character.
   	if (e.which !== 32) {
-  		$scope.phrase = $scope.phrase.replace(/[^A-Za-z0-9\s,\.?!]/g, '');
+  		$scope.phrase = $scope.phrase.replace(/[^A-Za-z0-9\s,\.?!']/g, '');
       $('#phrase').val($scope.phrase);
   	}
   });
 }]);
 
 ETFDEM.controller('AdminController', ['$scope', 'config', '$http', function($scope, config, $http) {
-  var Words, words, whenClicked, addWords, admin, noloop;
+  var Words, words, whenClicked, addWords, admin, noloop, noloop2;
   $scope.word = $scope.word || {};
   $scope.sentence = $scope.sentence || {};
   $scope.word.type = 'noun'; // set default select
   $scope.sentence.isFormal = 0;
   $scope.suggest = [];
+  $scope.suggest_sentence = [];
 
   adminAdd = {
     whenClicked : function () {
@@ -47,6 +48,8 @@ ETFDEM.controller('AdminController', ['$scope', 'config', '$http', function($sco
       });
 
       $('#addSentence').click(function() {
+        noloop2 = false;
+        $scope.suggest_sentence = [];
         that.addSentence();
       });
     },
@@ -77,6 +80,7 @@ ETFDEM.controller('AdminController', ['$scope', 'config', '$http', function($sco
     }
   };
 
+  // for adding words
   noloop = false;
   $('#eng_word').on('keyup', function(e) {
     var char = $('#eng_word').val();
@@ -109,6 +113,34 @@ ETFDEM.controller('AdminController', ['$scope', 'config', '$http', function($sco
       //adminAdd.addWords();
       $('#addWords').click();
       $('#eng_word').focus();
+    }
+  });
+
+  // for adding sentences
+  noloop2 = false;
+  $('#eng_sentence').on('keyup', function(e) {
+    var char = $('#eng_sentence').val();
+    if (char) {
+      if (!noloop2) {
+        $http.post(config.NODEURL + 'suggest-sentences', { char : char }).then(function(resp){
+          if ($.isEmptyObject(resp.data) === false) {
+            var data = resp.data;
+            for (var key in data) {
+              if (data.hasOwnProperty(key)) {
+                $scope.suggest_sentence.push(data[key]);
+              };
+            };
+            $('div#suggest_sentence').show();
+          };
+        }, function(resp) {
+          throw resp.status;
+        });
+      }
+      noloop2 = true;
+    } else {
+      $('div#suggest_sentence').hide();
+      $scope.suggest_sentence = [];
+      noloop2 = false;
     }
   });
 

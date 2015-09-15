@@ -6,7 +6,7 @@
 </div>
 <div class="row">
   <div class="col-md-6">
-    <input type="text" ng-model="sentence.eng" size="50">
+    <input type="text" id="eng_sentence" ng-model="sentence.eng" size="50">
   </div>
 </div>
 <div class="row">
@@ -17,7 +17,7 @@
 
 <div class="row">
   <div class="col-md-6">
-    <input type="text" ng-model="sentence.fil" size="50">
+    <input type="text" id="fil_sentence" ng-model="sentence.fil" size="50">
   </div>
 </div>
 <div class="row">
@@ -32,4 +32,17 @@
   <div class="col-md-3">
   	<button class="btn btn-primary" id="addSentence">Add Sentence</button>
   </div>
+</div>
+<br/><br/>
+<div id="suggest_sentence" style="display:none">
+  <table class="table table-striped">
+    <tr>
+      <th>English</th>
+      <th>Filipino</th>
+    </tr>
+    <tr ng-repeat="sug in suggest_sentence | filter:sentence.eng">
+      <td>{{ sug.english }}</td>
+      <td>{{ sug.filipino }}</td>
+    </tr>
+  </table>
 </div>
