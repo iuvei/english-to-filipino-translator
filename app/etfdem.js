@@ -16,8 +16,8 @@ ETFDEM.controller('MainController', ['$scope', 'config', '$http', function($scop
   $('#phrase').on('keyup', function(e) {
   	// if enter key, translate
   	if (e.which === 13) {
-  		//$scope.translatePhrase();
-      console.log($scope.phrase);
+  		$scope.translatePhrase();
+      //console.log($scope.phrase);
   		return;
   	}
   	// if key pressed is not equal to space key
@@ -101,6 +101,14 @@ ETFDEM.controller('AdminController', ['$scope', 'config', '$http', function($sco
       $('div#suggest').hide();
       $scope.suggest = [];
       noloop = false;
+    }
+  });
+
+  $('#fil_word').on('keyup', function(e) {
+    if (e.which === 13) {
+      //adminAdd.addWords();
+      $('#addWords').click();
+      $('#eng_word').focus();
     }
   });
 
