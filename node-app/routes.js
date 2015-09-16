@@ -3,6 +3,7 @@ var	sentenceCheck = require("./app_modules/sentence-checker");
 var translator = require("./app_modules/translator");
 var suggestWords = require("./app_modules/suggest-words");
 var suggestSentences = require("./app_modules/suggest-sentences");
+var url = require('url');
 
 module.exports = function(app) {
   app.post('/add-to-dictionary', function (req, res) {
@@ -39,6 +40,7 @@ module.exports = function(app) {
   	var query;
 
   	translator.assignPhrase(params.phrase);
+  	/*
   	query = translator.getFilPhrase();
   	query.exec(function (err, data) {
 	  if (err) {
@@ -49,9 +51,14 @@ module.exports = function(app) {
 	  	reply[i] = data[i];
 	  }
 
-	  res.writeHead(200, {'Content-Type': 'application/json'});
-	  res.end(JSON.stringify(reply));
+	  // let the algorithm translate
+	  translator.algoTranslate();
+	  //res.writeHead(200, {'Content-Type': 'application/json'});
+	  //res.end(JSON.stringify(reply));
 	});
+	*/
+	query = translator.algoTranslate();
+	res.end(JSON.stringify(query));
   });
 
   app.post('/suggest-words', function(req,res) {
@@ -78,7 +85,7 @@ module.exports = function(app) {
   app.post('/suggest-sentences', function(req,res) {
   	var params = req.body;
   	var reply = {};
-  	var query
+  	var query;
 
   	suggestSentences.chara = params.char;
   	query = suggestSentences.query();
@@ -96,16 +103,21 @@ module.exports = function(app) {
 	});
   });
 
-  app.get('/test', function (req, res) {
-  	var phrase = "the birds ate the bread";
+  app.post('/test', function (req, res) {
+  	var phrase = req.body.phrase;
   	var new_phrase;
-	new_phrase = phrase.replace(/(i|we|he|she|they|it|this)\s(don't|do not|am not|are not|aren't|is not|isn't|were not|weren't|was not|wasn't|hadnt|had not|have not|haven't|am not|would not|wouldn't|should not|shouldn't|could not|couldn't|is|are|was|have|were|should|could|would|am)/g, function (a,b,c) {
+
+  	phrase = phrase.replace(/(i|we|he|she|they|it|this|you)\s(should have not|may have not|will have not|must have not|shall have not|could have not|should have|may have|will have|must have|shall have|could have)/g, function(a,b,c) {
+  	  var str = a;
+	  str = str.replace(/\s/g, '')
+	  return str;
+  	});
+	new_phrase = phrase.replace(/(i|we|he|she|they|it|this|you)\s(don't|do not|am not|are not|aren't|is not|isn't|were not|weren't|was not|wasn't|hadnt|had not|have not|haven't|am not|would not|may not|wouldn't|will not|should not|shouldn't|could not|couldn't|shall not|must not|is|are|was|will|have|were|should|could|would|am|shall|must|may|do)/g, function (a,b,c) {
 	  var str = a;
 	  str = str.replace(/'/g, '');
 	  str = str.replace(/\s/g, '')
 	  return str;
 	});
-
 	res.end(new_phrase);
   })
 };

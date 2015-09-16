@@ -1,4 +1,5 @@
 var Sentence = require('../models/sentence');
+var Word = require('../models/dict');
 
 var Translator = function () {
 	this.phrase;
@@ -29,7 +30,7 @@ Translator.prototype.getEngPhrase = function() {
   }).select({ english: 1, isFormal: 1});
 };
 
-Translator.prototype.analyze = function() {
+Translator.prototype.algoTranslate = function() {
 	/*
 	  i dont like you
 	  hindi ko gusto ikaw
@@ -43,24 +44,38 @@ Translator.prototype.analyze = function() {
 	  like you, i am lazy
 	  tulad mo, ako ay tamad
 	*/
-	var phrase = this.phrase;
+	var phrase = this.phrase.toLowerCase();
+	var new_phrase = this.combinePronounsAndVerbs(phrase);
+	var arr = new_phrase.split(" ");
+	var arrlength = arr.length;
+	for (var i = 0; i < arrlength; i += 1) {
+
+	}
 };
 
-Translator.prototype.combineWords = function (string) {
-	var new_string = string.toLowerCase();
+Translator.prototype.combinePronounsAndVerbs = function (string) {
+	phrase = string.toLowerCase();
 
-	new_string = string.replace("i don't" , "idont");
-	new_string = string.replace("i do not" , "idont");
-	new_string = string.replace("i won't" , "iwont");
-	new_string = string.replace("i wont" , "iwont");
-	new_string = string.replace("i have not" , "ihavent");
-	new_string = string.replace("i haven't" , "ihavent");
-	new_string = string.replace("i would" , "iwould");
-	new_string = string.replace("i would not" , "iwouldnt");
-	new_string = string.replace("i wouldn't" , "iwouldnt");
-	new_string = string.replace("i could not" , "icouldnt");
-	new_string = string.replace("i couldn't" , "icouldnt");
-	new_string = string.replace("i should not" , "ishouldnt");
+	phrase = phrase.replace(/(i|we|he|she|they|it|this|you)\s(should have not|may have not|will have not|must have not|shall have not|could have not|should have|may have|will have|must have|shall have|could have)/g, function(a,b,c) {
+  	  var str = a;
+	  str = str.replace(/\s/g, '')
+	  return str;
+  	});
+
+	phrase = phrase.replace(/(i|we|he|she|they|it|this|you)\s(don't|do not|am not|are not|aren't|is not|isn't|were not|weren't|was not|wasn't|hadnt|had not|have not|haven't|am not|would not|may not|wouldn't|will not|should not|shouldn't|could not|couldn't|shall not|must not|is|are|was|will|have|were|should|could|would|am|shall|must|may|do)/g, function (a,b,c) {
+	  var str = a;
+	  str = str.replace(/'/g, '');
+	  str = str.replace(/\s/g, '')
+	  return str;
+	});
+
+	phrase = phrase.replace(/(in the|of the|from the|for the|at the|on the)/g, function (a,b,c) {
+	  var str = a;
+	  str = str.replace(/\s/g, '')
+	  return str;
+	});
+
+	return phrase;
 }
 
 module.exports = new Translator();
