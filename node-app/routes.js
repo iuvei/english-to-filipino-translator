@@ -40,6 +40,8 @@ module.exports = function(app) {
   	var query;
 
   	translator.assignPhrase(params.phrase);
+
+  	// removed below temporarily for testing purposes
   	/*
   	query = translator.getFilPhrase();
   	query.exec(function (err, data) {

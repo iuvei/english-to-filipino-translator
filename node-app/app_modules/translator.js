@@ -30,6 +30,22 @@ Translator.prototype.getEngPhrase = function() {
   }).select({ english: 1, isFormal: 1});
 };
 
+Translator.prototype.getFilWord = function(word) {
+  Word.findOne({ 'english': word }, 'filipino', function (err, res) {
+    if (err) {
+      throw err;
+    };
+
+    console.log(typeof(res.filipino));
+    if (res.filipino) {
+    	return res.filipino
+    }
+
+    return '';
+
+  });
+};
+
 Translator.prototype.algoTranslate = function() {
 	/*
 	  i dont like you
@@ -48,9 +64,20 @@ Translator.prototype.algoTranslate = function() {
 	var new_phrase = this.combinePronounsAndVerbs(phrase);
 	var arr = new_phrase.split(" ");
 	var arrlength = arr.length;
-	for (var i = 0; i < arrlength; i += 1) {
+	var string_result = '';
+	var fil = '';
 
-	}
+	for (var i = 0; i < arrlength; i += 1) {
+	  fil = this.getFilWord(arr[i]);
+
+	  if (!fil) {
+	  	string_result += ' ' + arr[i];
+	  } else {
+	  	string_result += ' ' + fil;
+	  }
+	};
+
+	return { string : string_result.trim() };
 };
 
 Translator.prototype.combinePronounsAndVerbs = function (string) {
