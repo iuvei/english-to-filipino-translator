@@ -30,23 +30,42 @@ Translator.prototype.getEngPhrase = function() {
   }).select({ english: 1, isFormal: 1});
 };
 
-Translator.prototype.getFilWord = function(word) {
+Translator.prototype.getFilWord = function(word, callback) {
   Word.findOne({ 'english': word }, 'filipino', function (err, res) {
     if (err) {
       throw err;
     };
 
-    console.log(typeof(res.filipino));
-    if (res.filipino) {
-    	return res.filipino
-    }
-
-    return '';
-
+    callback(res);
   });
 };
 
-Translator.prototype.algoTranslate = function() {
+Translator.prototype.NextTranslateFil = function () {
+  var counter = 0;
+  var string = '';
+  var that = this;
+	var func = function (arr, callback) {
+		// iterate through the array
+		that.getFilWord(arr[counter], function(res) {
+	  	if (res) {
+	  		string += ' ' + res.filipino;
+	  	} else {
+	  		string += ' ' + arr[counter];
+	  	};
+	  	
+	  	if (counter === arr.length - 1) {
+	  		return callback(string);
+	  	} else {
+	  		// increment the counter enclosed in a closure then call the function again.
+	  		counter += 1;
+	  		return func(arr, callback);
+	  	}
+	  });
+	};
+
+	return func;
+}
+Translator.prototype.algoTranslate = function(callback) {
 	/*
 	  i dont like you
 	  hindi ko gusto ikaw
@@ -63,21 +82,12 @@ Translator.prototype.algoTranslate = function() {
 	var phrase = this.phrase.toLowerCase();
 	var new_phrase = this.combinePronounsAndVerbs(phrase);
 	var arr = new_phrase.split(" ");
-	var arrlength = arr.length;
-	var string_result = '';
-	var fil = '';
 
-	for (var i = 0; i < arrlength; i += 1) {
-	  fil = this.getFilWord(arr[i]);
-
-	  if (!fil) {
-	  	string_result += ' ' + arr[i];
-	  } else {
-	  	string_result += ' ' + fil;
-	  }
-	};
-
-	return { string : string_result.trim() };
+	var nextTranslateFil = this.NextTranslateFil();
+	nextTranslateFil.call(this, arr, function(data) {
+		return callback({ string: data });
+	});
+	
 };
 
 Translator.prototype.combinePronounsAndVerbs = function (string) {

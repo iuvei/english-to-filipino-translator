@@ -59,8 +59,9 @@ module.exports = function(app) {
 	  //res.end(JSON.stringify(reply));
 	});
 	*/
-	query = translator.algoTranslate();
-	res.end(JSON.stringify(query));
+	translator.algoTranslate(function (query) {
+	  res.end(JSON.stringify(query));
+	});
   });
 
   app.post('/suggest-words', function(req,res) {
