@@ -18,7 +18,7 @@ WordCheck.prototype.checkValid = function(param) {
 	  	return false;
 	  };
 	  */
-	  
+
 	  return true;
 	}
 };
@@ -26,7 +26,7 @@ WordCheck.prototype.checkValid = function(param) {
 WordCheck.prototype.save = function(param) {
   var dict = new Dict();
   dict.english = param.english.toLowerCase();
-  dict.filipino = param.filipino.toLowerCase();
+  dict.filipino = param.filipino;
   dict.type = param.type;
   dict.verified = 1; // set verified to true
   dict.save(function(err) {

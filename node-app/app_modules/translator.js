@@ -105,6 +105,11 @@ Translator.prototype.combinePronounsAndVerbs = function (string) {
 	  str = str.replace(/\s/g, '')
 	  return str;
 	})
+	.replace(/(it)'(s)/g, function (a,b,c) {
+	  var str = a;
+	  str = str.replace(/'/g, 'i');
+	  return str;
+	})
 	.replace(/(in the|of the|from the|for the|at the|on the|is so)/g, function (a,b,c) {
 		var str = a;
 		str = str.replace(/\s/g, '')
@@ -124,6 +129,14 @@ Translator.prototype.combinePronounsAndVerbs = function (string) {
 		var str = a;
 		str = str.replace(/'/g, 'a')
 		return str;
+	})
+	.replace(/(do|did|have|had)\s(you)/g, function (a,b,c) {
+		var str = a;
+		str = str.replace(/\s/g, '')
+		return str;
+	})
+	.replace(/(it|i|you|he|she|they|we|his|her|doyou|didyou|haveyou|hadyou)\s([A-Za-z0-9]*)/g, function(a,b,c) {
+		return c + ' ' + b;
 	});
 
 	return phrase;
