@@ -44,8 +44,10 @@ Translator.prototype.NextTranslateFil = function () {
   var counter = 0;
   var string = '';
   var that = this;
+
+  // a recursive function
 	var func = function (arr, callback) {
-		// iterate through the array
+		// iterate through the array (arr)
 		that.getFilWord(arr[counter], function(res) {
 	  	if (res) {
 	  		string += ' ' + res.filipino;
@@ -91,25 +93,37 @@ Translator.prototype.algoTranslate = function(callback) {
 };
 
 Translator.prototype.combinePronounsAndVerbs = function (string) {
-	phrase = string.toLowerCase();
-
-	phrase = phrase.replace(/(i|we|he|she|they|it|this|you)\s(should have not|may have not|will have not|must have not|shall have not|could have not|should have|may have|will have|must have|shall have|could have)/g, function(a,b,c) {
-  	  var str = a;
-	  str = str.replace(/\s/g, '')
-	  return str;
-  	});
-
-	phrase = phrase.replace(/(i|we|he|she|they|it|this|you)\s(don't|do not|am not|are not|aren't|is not|isn't|were not|weren't|was not|wasn't|hadnt|had not|have not|haven't|am not|would not|may not|wouldn't|will not|should not|shouldn't|could not|couldn't|shall not|must not|is|are|was|will|have|were|should|could|would|am|shall|must|may|do)/g, function (a,b,c) {
+	phrase = string.toLowerCase()
+	.replace(/(i|we|he|she|they|it|this|you)\s(should have not|may have not|will have not|must have not|shall have not|could have not|should have|may have|will have|must have|shall have|could have)/g, function(a,b,c) {
+	  	var str = a;
+		  str = str.replace(/\s/g, '')
+		  return str;
+	})
+	.replace(/(i|we|he|she|they|it|this|you)\s(don't|do not|am not|are not|aren't|is not|isn't|were not|weren't|was not|wasn't|hadnt|had not|have not|haven't|am not|would not|may not|wouldn't|will not|should not|shouldn't|could not|couldn't|shall not|must not|is|are|was|will|have|were|should|could|would|am|shall|must|may|do)/g, function (a,b,c) {
 	  var str = a;
 	  str = str.replace(/'/g, '');
 	  str = str.replace(/\s/g, '')
 	  return str;
-	});
-
-	phrase = phrase.replace(/(in the|of the|from the|for the|at the|on the)/g, function (a,b,c) {
-	  var str = a;
-	  str = str.replace(/\s/g, '')
+	})
+	.replace(/(in the|of the|from the|for the|at the|on the|is so)/g, function (a,b,c) {
+		var str = a;
+		str = str.replace(/\s/g, '')
 	  return str;
+	})
+	.replace(/(is|was|has|have|had)\s(already)/g, function (a,b,c) {
+		var str = a;
+		str = str.replace(/\s/g, '')
+		return str;
+	})
+	.replace(/(i|you|she|they|we|he|it)\s(like|likes|liked)/g, function (a,b,c) {
+		var str = a;
+		str = str.replace(/\s/g, '')
+		return str;
+	})
+	.replace(/(you|they|we)'(re)/g, function (a,b,c) {
+		var str = a;
+		str = str.replace(/'/g, 'a')
+		return str;
 	});
 
 	return phrase;

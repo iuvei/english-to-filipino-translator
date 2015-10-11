@@ -12,11 +12,13 @@ WordCheck.prototype.checkValid = function(param) {
 	  	return false;
 	  };
 
+	  /*
 	  re = /^[A-Za-z\s]+$/g; // re-declare re otherwise false results
 	  if (re.test(param.filipino) === false) {
 	  	return false;
 	  };
-
+	  */
+	  
 	  return true;
 	}
 };
